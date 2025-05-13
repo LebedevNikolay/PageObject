@@ -1,4 +1,4 @@
-package ru.netology.web.page;
+package page;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -20,9 +20,9 @@ public class DashboardPage {
         heading.shouldBe(visible);
     }
 
-    public static ru.netology.web.page.TransferPage firstCardButton() {
+    public static TransferPage firstCardButton() {
         firstCard.click();
-        return new ru.netology.web.page.TransferPage();
+        return new TransferPage();
     }
 
     public static TransferPage secondCardButton() {

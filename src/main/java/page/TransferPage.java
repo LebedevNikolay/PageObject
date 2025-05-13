@@ -1,7 +1,7 @@
-package ru.netology.web.page;
+package page;
 
 import com.codeborne.selenide.SelenideElement;
-import ru.netology.web.data.DataHelper;
+import data.DataHelper;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
@@ -18,7 +18,7 @@ public class TransferPage {
         sum.setValue(String.valueOf(amount));
         fromWhichCard.setValue(String.valueOf(from));
         replenishButton.click();
-        new ru.netology.web.page.DashboardPage();
+        new DashboardPage();
     }
     // Перевод суммы превышающий лимит на карте;
     public void getErrorLimit() {

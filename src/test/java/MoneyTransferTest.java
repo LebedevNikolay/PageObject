@@ -3,14 +3,14 @@ package ru.netology.web.test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.netology.web.page.DashboardPage;
-import ru.netology.web.page.LoginPage;
+import page.DashboardPage;
+import page.LoginPage;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static ru.netology.web.data.DataHelper.*;
-import static ru.netology.web.page.DashboardPage.firstCardButton;
-import static ru.netology.web.page.DashboardPage.secondCardButton;
+import static DataHelper.*;
+import static page.DashboardPage.firstCardButton;
+import static page.DashboardPage.secondCardButton;
 
 class MoneyTransferTest {
     @BeforeEach

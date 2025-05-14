@@ -7,8 +7,11 @@ import page.DashboardPage;
 import page.LoginPage;
 
 import static com.codeborne.selenide.Selenide.open;
+import static data.DataHelper.getAuthInfo;
+import static data.DataHelper.getAuthInfo;
+import static data.DataHelper.getVerificationCodeFor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static DataHelper.*;
+import static data.DataHelper.*;
 import static page.DashboardPage.firstCardButton;
 import static page.DashboardPage.secondCardButton;
 

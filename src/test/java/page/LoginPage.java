@@ -2,7 +2,6 @@ package page;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.github.javafaker.Faker;
 import data.DataHelper;
 
 import static com.codeborne.selenide.Condition.visible;

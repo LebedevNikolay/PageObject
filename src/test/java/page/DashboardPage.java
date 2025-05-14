@@ -3,47 +3,47 @@ package page;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import lombok.val;
+
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.*;
 
 public class DashboardPage {
-    private SelenideElement heading = $("[data-test-id=dashboard]");
-    private static SelenideElement firstCard = $("[data-test-id='92df3f1c-a033-48e6-8390-206f6b1f56c0'] [role='button']");
-    private static SelenideElement secondCard = $("[data-test-id='0f3f5c2a-249e-4c3d-8287-09f7a039391d'] [role='button']");
-
-    private ElementsCollection cards = $$(".list__item");
+    private ElementsCollection cards = $$(".list__item div");
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
+    private SelenideElement refreshButton = $("[data-test-id='action-reload']"); // кнопка обновить
+    private SelenideElement buttonReplenishCard0001 = $$("[data-test-id='action-deposit']").first();
+    private SelenideElement buttonReplenishCard0002 = $$("[data-test-id='action-deposit']").last();
 
     public DashboardPage() {
-        heading.shouldBe(visible);
+        $("h1").shouldBe(visible);
     }
 
-    public static TransferPage firstCardButton() {
-        firstCard.click();
-        return new TransferPage();
+    public int getCardBalance(String id) {
+        val text = cards.find(text(id)).text();
+        return extractBalance(text);
     }
 
-    public static TransferPage secondCardButton() {
-        secondCard.click();
-        return new TransferPage();
-    }
-
-    public int getFirstCardBalance() {
-        var balance = cards.first().text();
-        return extractBalance(balance);
-    }
-
-    public int getSecondCardBalance() {
-        var balance = cards.last().text();
-        return extractBalance(balance);
-    }
-
-    private int extractBalance(String balance) {
-        var start = balance.indexOf(balanceStart);
-        var finish = balance.indexOf(balanceFinish);
-        var value = balance.substring(start + balanceStart.length(), finish);
+    private int extractBalance(String text) {
+        val start = text.indexOf(balanceStart);
+        val finish = text.indexOf(balanceFinish);
+        val value = text.substring(start + balanceStart.length(), finish);
         return Integer.parseInt(value);
+    }
+
+    public TransferPage replenishCard0001() {
+        buttonReplenishCard0001.click();
+        return new TransferPage();
+    }
+
+    public TransferPage replenishCard0002() {
+        buttonReplenishCard0002.click();
+        return new TransferPage();
+    }
+
+    public DashboardPage dashboardPage() {
+        refreshButton.click();
+        return new DashboardPage();
     }
 }

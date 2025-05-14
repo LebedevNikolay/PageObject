@@ -1,27 +1,38 @@
 package page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import data.DataHelper;
 
-import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class TransferPage {
-    private SelenideElement titleText = $(byText("Пополнение карты"));
-    private SelenideElement sum = $("[data-test-id=amount] [class='input__control']");
-    private SelenideElement fromWhichCard = $("[data-test-id=from] [class='input__control']");
-    private SelenideElement replenishButton = $("[data-test-id=action-transfer]");
-    private SelenideElement cancelButton = $("[data-test-id='action-cancel'] [class='button__content']");
+    private SelenideElement transferAmount = $("[data-test-id='amount'] input"); //сумма перевода
+    private SelenideElement fromTransfer = $("[data-test-id='from'] input"); //откуда перевод
+    private SelenideElement toTransfer = $("[data-test-id='to'] input"); // куда перевод - окно не активно
+    private SelenideElement buttonTransfer = $("[data-test-id='action-transfer']"); // кнопка перевод
+    private SelenideElement buttonCancel = $("[data-test-id='action-cancel']"); // кнопка отмены
 
-    // Перевод с карты на карту;
-    public void transferFromCardToCard(int amount, DataHelper.CardInfo from) {
-        sum.setValue(String.valueOf(amount));
-        fromWhichCard.setValue(String.valueOf(from));
-        replenishButton.click();
-        new DashboardPage();
+    private SelenideElement errorMassage = $("[data-test-id='error-notification']");
+
+    public TransferPage() {
+        transferAmount.shouldBe(Condition.visible);
+        fromTransfer.shouldBe(Condition.visible);
+        toTransfer.shouldBe(Condition.visible);
+        buttonTransfer.shouldBe(Condition.visible);
+        buttonCancel.shouldBe(Condition.visible);
     }
-    // Перевод суммы превышающий лимит на карте;
-    public void getErrorLimit() {
-        $(byText("Сумма превышает допустимый лимит!"));
+
+    public void getErrorMassage(String textError) {
+        errorMassage
+                .shouldHave(Condition.text("Ошибка!"))
+                .shouldBe(visible);
+    }
+
+    public DashboardPage transfer(int amount, String numberCard) {
+        transferAmount.setValue(String.valueOf(amount));
+        fromTransfer.setValue(numberCard);
+        buttonTransfer.click();
+        return new DashboardPage();
     }
 }

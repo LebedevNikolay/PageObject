@@ -1,35 +1,21 @@
-package page;
+package ru.netology.page;
 
-import com.codeborne.selenide.Condition;
+
 import com.codeborne.selenide.SelenideElement;
-import data.DataHelper;
+import ru.netology.data.DataHelper;
 
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage {
-    private SelenideElement loginField = $("[data-test-id=login] input");
-    private SelenideElement passwordField = $("[data-test-id=password] input");
-    private SelenideElement loginButton = $("[data-test-id=action-login]");
-    private SelenideElement errorMassage = $("[data-test-id='error-notification']");
 
-    public void getErrorMassage(String textError) {
-        errorMassage
-                .shouldHave(Condition.text(textError))
-                .shouldBe(visible);
-    }
+    private SelenideElement login = $("[data-test-id=login] input");
+    private SelenideElement password = $("[data-test-id=password] input");
+    private SelenideElement loginButton = $("[data-test-id=action-login]");
 
     public VerificationPage validLogin(DataHelper.AuthInfo info) {
-        loginField.setValue(info.getLogin());
-        passwordField.setValue(info.getPassword());
+        login.setValue(info.getLogin());
+        password.setValue(info.getPassword());
         loginButton.click();
         return new VerificationPage();
     }
-
-    public void invalidLoginOrPassword(DataHelper.AuthInfo info) {
-        loginField.setValue(info.getLogin());
-        passwordField.setValue(info.getPassword());
-        loginButton.click();
-    }
-
 }

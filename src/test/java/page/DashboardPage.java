@@ -1,27 +1,29 @@
-package page;
+package ru.netology.page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-
 import lombok.val;
+import ru.netology.data.DataHelper;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
 public class DashboardPage {
+    private SelenideElement heading = $("[data-test-id=dashboard]");
     private ElementsCollection cards = $$(".list__item div");
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
-    private SelenideElement refreshButton = $("[data-test-id='action-reload']"); // кнопка обновить
-    private SelenideElement buttonReplenishCard0001 = $$("[data-test-id='action-deposit']").first();
-    private SelenideElement buttonReplenishCard0002 = $$("[data-test-id='action-deposit']").last();
 
     public DashboardPage() {
-        $("h1").shouldBe(visible);
+        heading.shouldBe(visible);
     }
 
-    public int getCardBalance(String id) {
-        val text = cards.find(text(id)).text();
+    public int getCardBalance(DataHelper.CardData cardData) {
+        String text = $("[data-test-id =" +"'" + cardData.getTestIdInCss() + "']").getText();
         return extractBalance(text);
     }
 
@@ -32,18 +34,10 @@ public class DashboardPage {
         return Integer.parseInt(value);
     }
 
-    public TransferPage replenishCard0001() {
-        buttonReplenishCard0001.click();
+
+    public TransferPage getTransferPage(DataHelper.CardData cardData) {
+        cards.findBy(attribute("data-test-id", cardData.getTestIdInCss())).$("button").click();
         return new TransferPage();
     }
 
-    public TransferPage replenishCard0002() {
-        buttonReplenishCard0002.click();
-        return new TransferPage();
-    }
-
-    public DashboardPage dashboardPage() {
-        refreshButton.click();
-        return new DashboardPage();
-    }
 }

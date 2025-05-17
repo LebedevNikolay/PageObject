@@ -1,70 +1,57 @@
-package data;
+package ru.netology.data;
 
-import com.github.javafaker.Faker;
 import lombok.Value;
 
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.Random;
 
 public class DataHelper {
     private DataHelper() {
-    }
-
-    private static Faker faker;
-
-    @Value
-    public static class AuthInfo {
-        private String login;
-        private String password;
     }
 
     public static AuthInfo getAuthInfo() {
         return new AuthInfo("vasya", "qwerty123");
     }
 
-    public static AuthInfo getOtherAuthInfo() {
+    public static AuthInfo getOtherAuthInfo(AuthInfo original) {
         return new AuthInfo("petya", "123qwerty");
     }
 
-    public static AuthInfo getAuthInfoWithOtherLogin() {
-        faker = new Faker(new Locale("en"));
-        return new AuthInfo(faker.name().username(), "123qwerty");
-    }
-
-    public static AuthInfo getAuthInfoWithOtherPassword() {
-        faker = new Faker(new Locale("en"));
-        return new AuthInfo("vasya", faker.internet().password());
-    }
-
-
-    @Value
-    public static class VerificationCode {
-        private String code;
-    }
 
     public static VerificationCode getVerificationCodeFor(AuthInfo authInfo) {
         return new VerificationCode("12345");
     }
 
 
-    public static VerificationCode getNotVerificationCodeFor() {
-        return new VerificationCode("12348");
+    public static CardData getFirstCardData() {
+        return new CardData("5559 0000 0000 0001", "92df3f1c-a033-48e6-8390-206f6b1f56c0");
+    }
+
+    public static CardData getSecondCardData() {
+        return new CardData("5559 0000 0000 0002", "0f3f5c2a-249e-4c3d-8287-09f7a039391d");
+    }
+
+    public static int generateValidSum(int balance) {
+        return new Random().nextInt(balance) + 1;
+    }
+
+    public static int generateInvalidSum(int balance) {
+        return balance + new Random().nextInt(balance) + 1;
+    }
+
+    @Value
+    public static class VerificationCode {
+        String code;
+    }
+
+    @Value
+    public static class AuthInfo {
+        String login;
+        String password;
     }
 
     @Value
     public static class CardData {
-        private String cardNumber;
+        String cardNumber;
+        String testIdInCss;
     }
-
-    public static String cardNumber(String id) {
-        var city = Arrays.asList("5559000000000001", "5559000000000002");
-        if (Objects.equals(id, "0001")) {
-            return city.get(1);
-        } else {
-            return city.get(0);
-        }
-    }
-
-
 }

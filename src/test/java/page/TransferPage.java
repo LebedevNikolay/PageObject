@@ -1,38 +1,39 @@
-package page;
+package ru.netology.page;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import ru.netology.data.DataHelper;
 
-import static com.codeborne.selenide.Condition.visible;
+import java.time.Duration;
+
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
+
 
 public class TransferPage {
-    private SelenideElement transferAmount = $("[data-test-id='amount'] input"); //сумма перевода
-    private SelenideElement fromTransfer = $("[data-test-id='from'] input"); //откуда перевод
-    private SelenideElement toTransfer = $("[data-test-id='to'] input"); // куда перевод - окно не активно
-    private SelenideElement buttonTransfer = $("[data-test-id='action-transfer']"); // кнопка перевод
-    private SelenideElement buttonCancel = $("[data-test-id='action-cancel']"); // кнопка отмены
 
-    private SelenideElement errorMassage = $("[data-test-id='error-notification']");
+    private SelenideElement heading = $x("//h1[text()='Пополнение карты']");
+    private  SelenideElement amount = $("[data-test-id='amount'] .input__control");
+    private  SelenideElement from = $("[data-test-id='from'] .input__control");
+    private  SelenideElement messError = $("[data-test-id='error-notification'] .notification__content");
+    private  SelenideElement buttonTransfer = $("[data-test-id='action-transfer'");
 
     public TransferPage() {
-        transferAmount.shouldBe(Condition.visible);
-        fromTransfer.shouldBe(Condition.visible);
-        toTransfer.shouldBe(Condition.visible);
-        buttonTransfer.shouldBe(Condition.visible);
-        buttonCancel.shouldBe(Condition.visible);
+        heading.shouldBe(visible);
     }
 
-    public void getErrorMassage(String textError) {
-        errorMassage
-                .shouldHave(Condition.text("Ошибка!"))
-                .shouldBe(visible);
-    }
-
-    public DashboardPage transfer(int amount, String numberCard) {
-        transferAmount.setValue(String.valueOf(amount));
-        fromTransfer.setValue(numberCard);
-        buttonTransfer.click();
+    public  DashboardPage validTransfer(String sum, DataHelper.CardData cardData) {
+        topUpCard(sum, cardData);
         return new DashboardPage();
+    }
+
+    public void topUpCard(String sum, DataHelper.CardData cardData) {
+        amount.sendKeys(sum);
+        from.sendKeys(cardData.getCardNumber());
+        buttonTransfer.click();
+    }
+
+    public void errorWithInsufficientSum(String expectedText) {
+        messError.shouldHave(exactText(expectedText), Duration.ofSeconds(15)).shouldBe(visible);
     }
 }
